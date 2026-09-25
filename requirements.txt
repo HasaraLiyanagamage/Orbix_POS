@@ -1,0 +1,4 @@
+pywebview>=5.3; platform_system == "Windows"
+pyinstaller>=6.0; platform_system == "Windows"
+# QR support is bundled so every printed invoice has a scannable code offline.
+qrcode[pil]>=7.4; platform_system == "Windows"

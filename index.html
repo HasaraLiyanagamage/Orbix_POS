@@ -1,0 +1,2831 @@
+<!Doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ORBIX Technologies POS</title>
+    <style>
+        /* Shared ORBIX interface theme: used by sales, management and reports. */
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font: 14px Arial, sans-serif;
+            background: #eef1f5;
+            color: #1f2937
+        }
+
+        header {
+            height: 70px;
+            background: #123b72;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            padding: 0 28px;
+            justify-content: space-between
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 800
+        }
+
+        .brand img {
+            width: 150px;
+            height: 54px;
+            object-fit: contain;
+            object-position: left center;
+            background: transparent;
+            border-radius: 0;
+            padding: 0
+        }
+
+        .brand small {
+            display: block;
+            color: #dbe8fa;
+            font-size: 10px;
+            font-weight: 400;
+            margin-top: 3px
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600
+        }
+
+        .logout {
+            background: #fff;
+            color: #123b72;
+            font-weight: 700;
+            padding: 8px 13px
+        }
+
+        .logout:hover {
+            background: #dbe8fa
+        }
+
+        .invoice-link {
+            background: transparent;
+            color: #1d4f91;
+            padding: 0;
+            font-weight: 700;
+            text-decoration: underline;
+            text-underline-offset: 3px
+        }
+
+        .invoice-link:hover {
+            color: #0b78bd
+        }
+
+        .pos-party {
+            display: flex;
+            align-items: end;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .pos-party label {
+            display: grid;
+            gap: 4px;
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 700
+        }
+
+        .pos-party select,
+        .pos-party input {
+            min-width: 155px
+        }
+
+        .cashier-name {
+            color: #123b72;
+            font-size: 14px;
+            padding: 8px 4px;
+            white-space: nowrap
+        }
+
+        nav {
+            background: #fff;
+            border-bottom: 1px solid #cdd5df;
+            padding: 10px 28px;
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap
+        }
+
+        button {
+            font: inherit;
+            cursor: pointer;
+            border: 0;
+            border-radius: 6px;
+            padding: 9px 13px
+        }
+
+        .nav {
+            background: #e2e8f0;
+            color: #334155
+        }
+
+        .nav.active,
+        .primary {
+            background: #1d4f91;
+            color: #fff
+        }
+
+        .page {
+            display: none;
+            padding: 24px;
+            max-width: 1400px;
+            margin: auto
+        }
+
+        .page.active {
+            display: block
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 370px;
+            gap: 20px
+        }
+
+        .search {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            margin-bottom: 14px;
+            font: inherit
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px
+        }
+
+        .card,
+        .panel,
+        .table-card {
+            background: #fff;
+            border: 1px solid #d6dee8;
+            border-radius: 9px;
+            padding: 15px
+        }
+
+        .card {
+            cursor: pointer
+        }
+
+        .card:hover {
+            border-color: #2563a8
+        }
+
+        .card h3 {
+            margin: 7px 0;
+            font-size: 14px
+        }
+
+        .muted {
+            color: #64748b;
+            font-size: 12px
+        }
+
+        .price {
+            color: #1d4f91;
+            font-weight: bold
+        }
+
+        .low {
+            color: #c83349
+        }
+
+        .cart {
+            min-height: 500px;
+            display: flex;
+            flex-direction: column
+        }
+
+        .cart-items {
+            flex: 1
+        }
+
+        .cart-line {
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0
+        }
+
+        .cart-line>span {
+            float: right
+        }
+
+        .qty button {
+            padding: 1px 7px;
+            background: #e2e8f0
+        }
+
+        .summary {
+            border-top: 1px solid #cbd5e1;
+            padding-top: 12px
+        }
+
+        .summary div {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px
+        }
+
+        .summary .total {
+            font-size: 18px;
+            font-weight: bold
+        }
+
+        .wide {
+            width: 100%;
+            margin-top: 12px
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 18px
+        }
+
+        .stat {
+            background: #fff;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #d6dee8
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 22px;
+            margin-top: 7px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0
+        }
+
+        th {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #64748b
+        }
+
+        .modal-bg {
+            position: fixed;
+            inset: 0;
+            background: #182231a8;
+            display: none;
+            align-items: center;
+            justify-content: center
+        }
+
+        .modal-bg.show {
+            display: flex
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 10px;
+            padding: 23px;
+            width: min(430px, 92vw)
+        }
+
+        .modal h2 {
+            margin-top: 0
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 18px
+        }
+
+        .modal-header h2 {
+            margin: 0
+        }
+
+        .modal-close {
+            width: 34px;
+            height: 34px;
+            padding: 0;
+            border-radius: 50%;
+            background: #eef5fb;
+            color: #155592;
+            border: 1px solid #c6def2;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer
+        }
+
+        .modal-close:hover {
+            background: #dceefd;
+            color: #0b427e
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 9px;
+            margin-top: 20px
+        }
+
+        .modal input,
+        .modal select {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 7px 0 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 5px;
+            font: inherit
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end
+        }
+
+        .secondary {
+            background: #e2e8f0;
+            color: #334155
+        }
+
+        .scan-note {
+            font-size: 11px;
+            color: #64748b;
+            margin: 4px 0 14px
+        }
+
+        @media(max-width:800px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+
+            .stats {
+                grid-template-columns: 1fr
+            }
+
+            .page {
+                padding: 14px
+            }
+        }
+
+        /* ORBIX professional interface refresh */
+        :root {
+            --ink: #102a50;
+            --blue: #145da0;
+            --blue-dark: #0b3567;
+            --sky: #eaf4ff;
+            --line: #d9e4f2;
+            --slate: #63738b;
+            --surface: #ffffff;
+            --canvas: #f4f7fb;
+            --accent: #e43d55;
+            --shadow: 0 12px 32px rgba(16, 42, 80, .09);
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #f4f8fd 0%, #edf3f9 100%);
+            color: var(--ink);
+            letter-spacing: .005em;
+        }
+
+        header {
+            height: 86px;
+            padding: 0 42px;
+            background: linear-gradient(115deg, #092b56 0%, #145da0 58%, #1674b7 100%);
+            box-shadow: 0 4px 16px rgba(12, 47, 92, .22);
+        }
+
+        .brand {
+            gap: 16px;
+            font-size: 20px;
+            letter-spacing: -.02em;
+        }
+
+        .brand img {
+            width: 154px;
+            height: 62px;
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .12));
+        }
+
+        .brand small {
+            color: #d8ecff;
+            font-size: 11px;
+            letter-spacing: .015em;
+        }
+
+        .user-actions {
+            gap: 16px;
+            font-size: 14px;
+        }
+
+        .logout {
+            border: 1px solid rgba(255, 255, 255, .7);
+            background: rgba(255, 255, 255, .96);
+            color: var(--blue-dark);
+            border-radius: 9px;
+            padding: 9px 16px;
+            box-shadow: 0 3px 9px rgba(0, 0, 0, .12);
+        }
+
+        .logout:hover {
+            background: #fff;
+            transform: translateY(-1px);
+        }
+
+        nav {
+            padding: 12px 42px;
+            gap: 9px;
+            background: rgba(255, 255, 255, .94);
+            border-bottom: 1px solid var(--line);
+            box-shadow: 0 1px 2px rgba(22, 55, 91, .04);
+        }
+
+        button {
+            transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+            border-radius: 8px;
+            font-weight: 650;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        .nav {
+            background: #edf2f8;
+            color: #43546c;
+            padding: 10px 15px;
+        }
+
+        .nav:hover {
+            background: #dceaf8;
+            color: var(--blue-dark);
+        }
+
+        .nav.active,
+        .primary {
+            background: linear-gradient(135deg, #145da0, #0d4d91);
+            box-shadow: 0 5px 12px rgba(20, 93, 160, .22);
+            color: #fff;
+        }
+
+        .page {
+            max-width: 1500px;
+            padding: 30px 42px 46px;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: -.025em;
+            color: var(--ink);
+        }
+
+        h3 {
+            color: var(--ink);
+        }
+
+        .grid {
+            grid-template-columns: minmax(0, 1fr) 385px;
+            gap: 24px;
+        }
+
+        .toolbar {
+            gap: 14px;
+            margin-bottom: 19px;
+        }
+
+        .toolbar>div:first-child {
+            min-width: 0;
+        }
+
+        .pos-party {
+            gap: 10px;
+        }
+
+        .pos-party label {
+            color: var(--slate);
+            font-size: 11px;
+            letter-spacing: .035em;
+            text-transform: uppercase;
+        }
+
+        select,
+        input {
+            font: inherit;
+            color: var(--ink);
+            background: #fff;
+            border: 1px solid #c9d8e9;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: #2c86cb;
+            box-shadow: 0 0 0 3px rgba(44, 134, 203, .14);
+        }
+
+        .pos-party select,
+        .pos-party input {
+            min-width: 178px;
+            padding: 8px 10px;
+        }
+
+        .cashier-name {
+            background: var(--sky);
+            border: 1px solid #cee3f9;
+            border-radius: 8px;
+            padding: 9px 12px;
+            color: var(--blue-dark);
+        }
+
+        .search {
+            padding: 15px 17px;
+            border: 1px solid #c9d8e9;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 3px 12px rgba(26, 62, 104, .04);
+            margin-bottom: 9px;
+        }
+
+        .search:focus {
+            border-color: #2c86cb;
+            box-shadow: 0 0 0 4px rgba(44, 134, 203, .12);
+        }
+
+        .products {
+            gap: 15px;
+        }
+
+        .card,
+        .panel,
+        .table-card,
+        .stat {
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, .96);
+            box-shadow: 0 5px 16px rgba(19, 53, 94, .045);
+        }
+
+        .card {
+            min-height: 146px;
+            padding: 17px;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: transparent;
+            transition: background .16s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: #8bbbe6;
+            box-shadow: var(--shadow);
+        }
+
+        .card:hover:before {
+            background: var(--blue);
+        }
+
+        .card h3 {
+            font-size: 15px;
+            line-height: 1.32;
+            margin: 9px 0 8px;
+        }
+
+        .muted {
+            color: #728198;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .price {
+            color: #0c5fa8;
+            font-size: 15px;
+        }
+
+        .panel,
+        .table-card {
+            border-radius: 13px;
+            padding: 20px;
+        }
+
+        .cart {
+            min-height: 585px;
+            position: sticky;
+            top: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .cart .toolbar h2 {
+            font-size: 22px;
+        }
+
+        .cart-line {
+            padding: 14px 0;
+            border-bottom: 1px solid #e4edf6;
+        }
+
+        .cart-line>span {
+            color: var(--blue-dark);
+            font-weight: 750;
+        }
+
+        .qty {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 9px;
+            color: #52647d;
+        }
+
+        .qty button {
+            display: grid;
+            place-items: center;
+            width: 38px;
+            min-width: 38px;
+            height: 34px;
+            min-height: 34px;
+            padding: 0;
+            border-radius: 9px;
+            background: #e6f0fa;
+            color: var(--blue-dark);
+            font-size: 19px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .qty button:hover {
+            background: #d7eafd;
+        }
+
+        .qty input {
+            width: 66px;
+            min-height: 34px;
+            height: 34px;
+            padding: 3px 5px;
+            text-align: center;
+            font-weight: 750;
+            color: var(--blue-dark);
+            border: 1px solid #b8d2ea;
+            border-radius: 8px;
+        }
+
+        /* Compact per-line controls keep item discounts usable even on busy bills. */
+        .line-discount {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            color: #61728a;
+            font-size: 12px;
+        }
+
+        .line-discount label {
+            white-space: nowrap;
+        }
+
+        .line-discount select,
+        .line-discount input {
+            min-height: 30px;
+            height: 30px;
+            padding: 3px 6px;
+            font-size: 12px;
+            border: 1px solid #cbddec;
+            border-radius: 6px;
+        }
+
+        .line-discount select {
+            width: 58px;
+        }
+
+        .line-discount input {
+            width: 78px;
+        }
+
+        .item-number {
+            display: inline-grid;
+            place-items: center;
+            width: 22px;
+            height: 22px;
+            margin-right: 7px;
+            border-radius: 50%;
+            background: #e7f2fc;
+            color: #145a96;
+            font-size: 12px;
+            font-weight: 800;
+            vertical-align: middle;
+        }
+
+        .summary {
+            border-top: 2px solid #d9e7f5;
+            padding-top: 14px;
+            margin-top: 12px;
+        }
+
+        .summary div {
+            padding: 7px 3px;
+        }
+
+        .summary .total {
+            background: #edf6ff;
+            margin: 7px -6px 13px;
+            padding: 12px 9px;
+            border-radius: 8px;
+            color: var(--blue-dark);
+        }
+
+        .wide {
+            padding: 12px 14px;
+            border-radius: 9px;
+        }
+
+        .secondary {
+            background: #e9f0f8;
+            color: #34516f;
+            border: 1px solid #d9e4f0;
+        }
+
+        .secondary:hover {
+            background: #dceafb;
+            color: #0d4d91;
+        }
+
+        .stats {
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .stat {
+            padding: 19px 20px;
+            border-radius: 12px;
+            min-height: 104px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #145da0, #4da3de);
+            opacity: .8;
+        }
+
+        .stat strong {
+            font-size: 25px;
+            letter-spacing: -.035em;
+            color: var(--blue-dark);
+        }
+
+        /* Dashboard layout keeps daily trading information readable at a glance. */
+        .dashboard-hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            padding: 28px 30px;
+            margin-bottom: 22px;
+            border-radius: 17px;
+            color: #fff;
+            background: radial-gradient(circle at 86% 18%, rgba(103, 197, 247, .36), transparent 30%), linear-gradient(120deg, #082b57, #125c9f 62%, #187bbd);
+            box-shadow: 0 15px 30px rgba(11, 63, 117, .2);
+        }
+
+        .dashboard-eyebrow {
+            margin: 0 0 8px;
+            color: #aee0ff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .dashboard-hero h2 {
+            color: #fff;
+            font-size: 29px;
+        }
+
+        .dashboard-hero p {
+            margin: 8px 0 0;
+            color: #dceeff;
+            font-size: 13px;
+        }
+
+        .dashboard-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-actions .secondary {
+            background: rgba(255, 255, 255, .13);
+            border-color: rgba(255, 255, 255, .46);
+            color: #fff;
+        }
+
+        .dashboard-actions .secondary:hover {
+            background: rgba(255, 255, 255, .22);
+            color: #fff;
+        }
+
+        .dashboard-actions .primary {
+            background: #fff;
+            border-color: #fff;
+            color: #0b4a88;
+            box-shadow: none;
+        }
+
+        .dashboard-actions .primary:hover {
+            background: #e8f5ff;
+        }
+
+        .dashboard-metrics {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-metric {
+            min-height: 133px;
+            padding: 19px;
+            border: 1px solid #dce8f4;
+            border-radius: 14px;
+            background: #fff;
+            box-shadow: 0 8px 22px rgba(23, 61, 105, .06);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-metric:after {
+            content: "";
+            position: absolute;
+            right: -23px;
+            top: -23px;
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            background: #eaf5ff;
+        }
+
+        .dashboard-metric .metric-label {
+            position: relative;
+            z-index: 1;
+            display: block;
+            color: #62758e;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .055em;
+            text-transform: uppercase;
+        }
+
+        .dashboard-metric strong {
+            position: relative;
+            z-index: 1;
+            display: block;
+            margin-top: 11px;
+            color: #0d386c;
+            font-size: 25px;
+            letter-spacing: -.045em;
+            line-height: 1.12;
+        }
+
+        .dashboard-metric small {
+            position: relative;
+            z-index: 1;
+            display: block;
+            margin-top: 7px;
+            color: #73859c;
+            font-size: 12px;
+        }
+
+        .dashboard-metric.is-warning:after {
+            background: #fff1df;
+        }
+
+        .dashboard-metric.is-warning strong {
+            color: #a85a05;
+        }
+
+        .dashboard-metric.is-credit:after {
+            background: #fff0f3;
+        }
+
+        .dashboard-metric.is-credit strong {
+            color: #bd2947;
+        }
+
+        .dashboard-lower {
+            display: grid;
+            grid-template-columns: 1.15fr .85fr;
+            gap: 20px;
+        }
+
+        .dashboard-panel {
+            min-height: 265px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .dashboard-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 20px;
+            border-bottom: 1px solid #e1ebf5;
+        }
+
+        .dashboard-panel-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .dashboard-panel-header p {
+            margin: 4px 0 0;
+            color: #74869d;
+            font-size: 12px;
+        }
+
+        .dashboard-list {
+            padding: 4px 20px 14px;
+        }
+
+        .dashboard-list-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 0;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .dashboard-list-row:last-child {
+            border-bottom: 0;
+        }
+
+        .dashboard-list-row b {
+            color: #17395f;
+        }
+
+        .dashboard-list-row span {
+            color: #63768f;
+            font-size: 12px;
+        }
+
+        .stock-badge {
+            min-width: 82px;
+            padding: 6px 9px;
+            border-radius: 999px;
+            text-align: center;
+            color: #9d3a06 !important;
+            background: #fff1df;
+            font-weight: 800;
+        }
+
+        .stock-badge.out {
+            color: #b91c38 !important;
+            background: #ffebef;
+        }
+
+        .dashboard-empty {
+            display: grid;
+            place-items: center;
+            min-height: 170px;
+            color: #71849b;
+            text-align: center;
+        }
+
+        @media(max-width:1000px) {
+            .dashboard-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard-lower {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width:620px) {
+            .dashboard-hero {
+                display: block;
+                padding: 23px 20px;
+            }
+
+            .dashboard-hero h2 {
+                font-size: 24px;
+            }
+
+            .dashboard-actions {
+                justify-content: flex-start;
+                margin-top: 18px;
+            }
+
+            .dashboard-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Shared management-page treatment: tables, forms and report sections. */
+        #products>.toolbar:first-child,
+        #services>.toolbar:first-child,
+        #customers>.toolbar:first-child,
+        #employees>.toolbar:first-child,
+        #users>.toolbar:first-child,
+        #sales>.toolbar:first-child,
+        #returns>.toolbar:first-child,
+        #credits>.toolbar:first-child,
+        #daily-report>.toolbar:first-child {
+            padding: 22px 24px;
+            margin-bottom: 20px;
+            border: 1px solid #dce7f2;
+            border-radius: 14px;
+            background: linear-gradient(105deg, #ffffff, #f5faff);
+            box-shadow: 0 7px 20px rgba(23, 61, 105, .055);
+        }
+
+        #products>.toolbar:first-child h2,
+        #services>.toolbar:first-child h2,
+        #customers>.toolbar:first-child h2,
+        #employees>.toolbar:first-child h2,
+        #users>.toolbar:first-child h2,
+        #sales>.toolbar:first-child h2,
+        #returns>.toolbar:first-child h2,
+        #credits>.toolbar:first-child h2,
+        #daily-report>.toolbar:first-child h2 {
+            font-size: 25px;
+        }
+
+        #products>.toolbar:first-child h2:after,
+        #services>.toolbar:first-child h2:after,
+        #customers>.toolbar:first-child h2:after,
+        #employees>.toolbar:first-child h2:after,
+        #users>.toolbar:first-child h2:after,
+        #sales>.toolbar:first-child h2:after,
+        #returns>.toolbar:first-child h2:after,
+        #credits>.toolbar:first-child h2:after,
+        #daily-report>.toolbar:first-child h2:after {
+            content: "";
+            display: block;
+            width: 38px;
+            height: 3px;
+            margin-top: 10px;
+            border-radius: 99px;
+            background: linear-gradient(90deg, #1263ad, #57b9ed);
+        }
+
+        #products>.toolbar:first-child .scan-note,
+        #services>.toolbar:first-child .scan-note,
+        #customers>.toolbar:first-child .scan-note,
+        #employees>.toolbar:first-child .scan-note,
+        #users>.toolbar:first-child .scan-note,
+        #sales>.toolbar:first-child .scan-note,
+        #returns>.toolbar:first-child .scan-note,
+        #credits>.toolbar:first-child .scan-note,
+        #daily-report>.toolbar:first-child .scan-note {
+            margin: 8px 0 0;
+            max-width: 670px;
+        }
+
+        .page>.table-card {
+            margin-bottom: 18px;
+        }
+
+        .table-card {
+            overflow-x: auto;
+        }
+
+        .table-card table {
+            min-width: 650px;
+        }
+
+        .table-card thead th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            padding: 14px 13px;
+            background: #eef5fc;
+            border-bottom: 1px solid #d6e4f2;
+        }
+
+        .table-card tbody td {
+            color: #364f6f;
+        }
+
+        .table-card tbody tr:nth-child(even) {
+            background: rgba(247, 251, 255, .72);
+        }
+
+        .table-card tbody tr:hover {
+            background: #edf7ff;
+        }
+
+        .table-card td:last-child {
+            white-space: nowrap;
+        }
+
+        .table-card h3 {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        #returns .table-card:first-of-type,
+        #credits .table-card:first-of-type {
+            box-shadow: var(--shadow);
+        }
+
+        #returns #return-sale-details {
+            margin-top: 14px;
+            padding: 12px 14px;
+            border-radius: 9px;
+            background: #f5f9fd;
+            border: 1px dashed #c9dced;
+        }
+
+        #returns #return-actions {
+            padding: 16px;
+            border-radius: 10px;
+            background: #f8fbfe;
+            border: 1px solid #dce8f3;
+        }
+
+        #daily-report .stats {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        #daily-report .table-card {
+            box-shadow: 0 7px 18px rgba(23, 61, 105, .055);
+        }
+
+        #sales .stats,
+        #products .stats {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .sales-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: -2px 0 16px;
+            padding: 12px;
+            border: 1px solid #dce8f3;
+            border-radius: 11px;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(23, 61, 105, .04);
+        }
+
+        .sales-search-bar .search {
+            flex: 1;
+            min-width: 220px;
+            width: auto;
+            margin: 0;
+            padding: 11px 13px;
+            box-shadow: none;
+        }
+
+        .sales-search-bar .muted {
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        .inventory-filters {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 0 18px;
+            padding: 12px;
+            border: 1px solid #dce8f3;
+            border-radius: 11px;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(23, 61, 105, .04);
+        }
+
+        .inventory-filters input {
+            flex: 1;
+            min-width: 230px;
+            padding: 10px 13px;
+        }
+
+        .inventory-filters select {
+            min-width: 180px;
+            padding: 10px 12px;
+        }
+
+        .management-filters {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 0 18px;
+            padding: 12px;
+            border: 1px solid #dce8f3;
+            border-radius: 11px;
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(23, 61, 105, .04);
+        }
+
+        .management-filters input {
+            flex: 1;
+            min-width: 230px;
+            padding: 10px 13px;
+        }
+
+        .management-filters select {
+            min-width: 190px;
+            padding: 10px 12px;
+        }
+
+        .management-filters .muted {
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        .management-filters.compact {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .management-filters.compact input {
+            max-width: 330px;
+            min-height: 38px;
+            padding: 8px 11px;
+        }
+
+        #credits .table-card,
+        #users .table-card {
+            box-shadow: 0 7px 18px rgba(23, 61, 105, .055);
+        }
+
+        #pos .toolbar:first-child {
+            padding: 4px 0 13px;
+            border-bottom: 1px solid #dce8f4;
+        }
+
+        #pos .toolbar:first-child h2 {
+            font-size: 26px;
+        }
+
+        #pos .panel.cart {
+            border-top: 4px solid #1674b7;
+        }
+
+        /* A bill grows naturally so the cashier can review every line item at once. */
+        #pos .grid {
+            align-items: start;
+        }
+
+        #pos .cart {
+            height: auto;
+            min-height: 0;
+            max-height: none;
+        }
+
+        /* On the desktop the whole bill remains anchored at the top-right while it grows. */
+        #pos .grid>.cart {
+            position: sticky;
+            top: 18px;
+            align-self: start;
+        }
+
+        #pos .cart .toolbar,
+        #pos .cart .summary {
+            flex: 0 0 auto;
+        }
+
+        #pos .cart-items {
+            min-height: 0;
+            max-height: none;
+            overflow: visible;
+            padding-right: 0;
+        }
+
+        #pos .cart .summary {
+            margin-top: 8px;
+            padding-top: 9px;
+            font-size: 13px;
+        }
+
+        #pos .cart .summary div {
+            padding: 3px;
+        }
+
+        #pos .cart .summary .total {
+            margin: 5px -4px 8px;
+            padding: 9px 7px;
+        }
+
+        #pos .cart .summary select,
+        #pos .cart .summary input {
+            min-height: 34px !important;
+            padding: 5px 8px !important;
+        }
+
+        #pos .cart .summary .wide {
+            min-height: 40px;
+            margin-top: 8px;
+            padding: 9px 12px;
+        }
+
+        #pos .cart .summary .scan-note {
+            margin: 7px 0 0;
+        }
+
+        #pos .products .card .muted:first-child {
+            display: inline-block;
+            padding: 4px 7px;
+            border-radius: 5px;
+            background: #f0f7ff;
+            color: #477197;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .025em;
+        }
+
+        #pos .products .card p {
+            margin-bottom: 0;
+        }
+
+        @media(max-width:1000px) {
+
+            #daily-report .stats,
+            #sales .stats,
+            #products .stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media(max-width:620px) {
+
+            #products>.toolbar:first-child,
+            #services>.toolbar:first-child,
+            #customers>.toolbar:first-child,
+            #employees>.toolbar:first-child,
+            #users>.toolbar:first-child,
+            #sales>.toolbar:first-child,
+            #returns>.toolbar:first-child,
+            #credits>.toolbar:first-child,
+            #daily-report>.toolbar:first-child {
+                padding: 18px;
+            }
+
+            #daily-report .stats,
+            #sales .stats,
+            #products .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .sales-search-bar,
+            .inventory-filters,
+            .management-filters {
+                align-items: stretch;
+                flex-wrap: wrap;
+            }
+
+            .sales-search-bar .search,
+            .inventory-filters input,
+            .inventory-filters select,
+            .management-filters input,
+            .management-filters select {
+                flex-basis: 100%;
+            }
+
+            .sales-search-bar .muted,
+            .management-filters .muted {
+                margin-left: 0;
+            }
+
+            .table-card table {
+                min-width: 580px;
+            }
+        }
+
+        th {
+            background: #f2f7fc;
+            color: #5a6d85;
+            font-size: 11px;
+            letter-spacing: .045em;
+        }
+
+        th,
+        td {
+            padding: 14px 13px;
+        }
+
+        tbody tr:hover {
+            background: #f7fbff;
+        }
+
+        .modal-bg {
+            background: rgba(7, 27, 55, .54);
+            backdrop-filter: blur(3px);
+            z-index: 100;
+        }
+
+        .modal {
+            border-radius: 15px;
+            padding: 27px;
+            box-shadow: 0 22px 60px rgba(0, 0, 0, .26);
+            border: 1px solid rgba(255, 255, 255, .8);
+        }
+
+        .modal h2 {
+            font-size: 22px;
+        }
+
+        .modal input,
+        .modal select {
+            padding: 11px 12px;
+            margin: 7px 0 16px;
+            border-radius: 8px;
+        }
+
+        .scan-note {
+            color: #728198;
+            font-size: 12px;
+        }
+
+        .low {
+            color: #d02c45;
+            font-weight: 700;
+        }
+
+        .primary {
+            background: linear-gradient(135deg, #1263ad, #0b427e);
+            color: #fff;
+            border: 1px solid #0b4f93;
+        }
+
+        .primary:hover {
+            background: linear-gradient(135deg, #1676c7, #0b4f93);
+            box-shadow: 0 7px 15px rgba(18, 99, 173, .27);
+        }
+
+        .secondary {
+            background: #f7fbff;
+            color: #155592;
+            border: 1px solid #b9d6ef;
+        }
+
+        .secondary:hover {
+            background: #e1f0fc;
+            border-color: #6da9d6;
+        }
+
+        .table-card button:not(.primary):not(.secondary),
+        .card button:not(.primary):not(.secondary) {
+            background: #eff6fd;
+            color: #145a99;
+            border: 1px solid #c6def2;
+            padding: 7px 10px;
+            font-size: 12px;
+        }
+
+        .table-card button:not(.primary):not(.secondary):hover,
+        .card button:not(.primary):not(.secondary):hover {
+            background: #dceefd;
+        }
+
+        #login-overlay {
+            padding: 22px;
+            background: radial-gradient(circle at 14% 18%, rgba(91, 183, 243, .45), transparent 28%), radial-gradient(circle at 84% 78%, rgba(27, 105, 180, .46), transparent 28%), linear-gradient(135deg, #061f42, #0e4e8c 58%, #1374b9);
+        }
+
+        .login-card {
+            position: relative;
+            width: min(440px, 100%);
+            padding: 34px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, .98);
+            box-shadow: 0 28px 75px rgba(1, 21, 50, .42);
+        }
+
+        .login-card:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #1263ad, #4eb8ef);
+        }
+
+        .login-brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 22px;
+        }
+
+        .login-brand img {
+            width: 118px;
+            height: 52px;
+            object-fit: contain;
+        }
+
+        .login-brand strong {
+            display: block;
+            font-size: 18px;
+            color: #123b72;
+        }
+
+        .login-brand span {
+            display: block;
+            margin-top: 4px;
+            font-size: 12px;
+            color: #728198;
+        }
+
+        .login-card h2 {
+            margin: 0 0 8px;
+            font-size: 26px;
+        }
+
+        .login-card p {
+            color: #64748b;
+            line-height: 1.55;
+            margin: 0 0 20px;
+        }
+
+        .login-card label {
+            display: grid;
+            gap: 6px;
+            margin-top: 13px;
+            color: #4b617b;
+            font-size: 12px;
+            font-weight: 750;
+            letter-spacing: .02em;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #c8d9eb;
+            border-radius: 9px;
+            font-size: 14px;
+        }
+
+        .login-card .primary {
+            margin-top: 22px;
+            padding: 13px;
+            font-size: 15px;
+        }
+
+        .login-note {
+            margin-top: 18px;
+            text-align: center;
+            color: #6d8199;
+            font-size: 11px;
+        }
+
+        /* Compact header and focused checkout controls for counter use. */
+        header {
+            height: 72px;
+            padding: 0 40px;
+        }
+
+        .brand {
+            gap: 12px;
+        }
+
+        .brand img {
+            width: 132px;
+            height: 48px;
+        }
+
+        .brand-copy strong {
+            display: block;
+            color: #fff;
+            font-size: 19px;
+            letter-spacing: -.025em;
+        }
+
+        .brand-copy small {
+            margin-top: 2px;
+            font-size: 10px;
+        }
+
+        .user-actions {
+            gap: 12px;
+        }
+
+        .signed-in {
+            display: grid;
+            gap: 2px;
+            text-align: right;
+        }
+
+        .signed-in span {
+            color: #b9dcf5;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+        }
+
+        .signed-in b {
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .logout {
+            min-height: 38px;
+            padding: 7px 14px;
+        }
+
+        #pos {
+            max-width: 1540px;
+        }
+
+        #pos .grid {
+            gap: 22px;
+        }
+
+        .pos-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            padding: 4px 0 16px;
+            margin-bottom: 14px;
+            border-bottom: 1px solid #d7e5f3;
+        }
+
+        .pos-heading h2 {
+            margin: 2px 0 5px;
+            font-size: 29px;
+        }
+
+        .pos-heading p {
+            margin: 0;
+            color: #71839b;
+            font-size: 13px;
+        }
+
+        .pos-eyebrow {
+            display: block;
+            color: #1775bb;
+            font-size: 10px;
+            font-weight: 850;
+            letter-spacing: .12em;
+        }
+
+        .cashier-status {
+            min-width: 190px;
+            padding: 11px 14px;
+            border: 1px solid #cfe4f7;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #f6fbff, #eaf5ff);
+        }
+
+        .cashier-status span,
+        .price-tier span {
+            display: block;
+            color: #6a7e98;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .055em;
+            text-transform: uppercase;
+        }
+
+        .cashier-status b {
+            display: block;
+            margin-top: 4px;
+            color: #123e75;
+            font-size: 14px;
+        }
+
+        .pos-customer-bar {
+            display: grid;
+            grid-template-columns: minmax(175px, .9fr) minmax(250px, 1.35fr) auto minmax(185px, 1fr) auto;
+            align-items: end;
+            gap: 10px;
+            padding: 14px;
+            margin-bottom: 17px;
+            border: 1px solid #d8e6f4;
+            border-radius: 13px;
+            background: #fff;
+            box-shadow: 0 6px 17px rgba(23, 61, 105, .045);
+        }
+
+        .pos-field {
+            display: grid;
+            gap: 5px;
+            color: #607590;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .055em;
+            text-transform: uppercase;
+        }
+
+        .pos-field input,
+        .pos-field select {
+            width: 100%;
+            min-width: 0;
+            padding: 9px 11px;
+        }
+
+        .customer-search-field {
+            position: relative;
+        }
+
+        .customer-suggestions {
+            display: none;
+            position: absolute;
+            z-index: 20;
+            left: 0;
+            right: 0;
+            top: calc(100% + 5px);
+            max-height: 250px;
+            overflow: auto;
+            border: 1px solid #cbddec;
+            border-radius: 9px;
+            background: #fff;
+            box-shadow: 0 14px 28px rgba(15, 52, 93, .18);
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .customer-suggestions.show {
+            display: block;
+        }
+
+        .customer-suggestion {
+            display: grid;
+            width: 100%;
+            min-height: 0;
+            padding: 10px 12px;
+            border: 0;
+            border-bottom: 1px solid #e6eef7;
+            border-radius: 0;
+            background: #fff;
+            color: var(--ink);
+            text-align: left;
+            box-shadow: none;
+        }
+
+        .customer-suggestion:last-child {
+            border-bottom: 0;
+        }
+
+        .customer-suggestion:hover {
+            transform: none;
+            background: #eff7ff;
+        }
+
+        .customer-suggestion strong {
+            font-size: 13px;
+        }
+
+        .customer-suggestion small {
+            margin-top: 3px;
+            color: #70819a;
+            font-size: 11px;
+        }
+
+        .add-customer-button {
+            min-height: 40px;
+            padding: 8px 13px;
+            white-space: nowrap;
+        }
+
+        .price-tier {
+            align-self: stretch;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+            padding: 8px 11px;
+            border-left: 3px solid #43a2df;
+            border-radius: 7px;
+            background: #f2f8fe;
+        }
+
+        .price-tier b {
+            margin-top: 4px;
+            overflow: hidden;
+            color: #1a497e;
+            font-size: 12px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        #pos>.grid>div>.search {
+            margin-top: 0;
+        }
+
+        #pos .scan-note {
+            margin: 0 0 16px;
+        }
+
+        #pos .products {
+            padding-bottom: 14px;
+        }
+
+        #pos .card {
+            min-height: 158px;
+        }
+
+        #pos .panel.cart {
+            padding: 18px;
+        }
+
+        #pos .cart .toolbar {
+            margin-bottom: 12px;
+        }
+
+        #pos .cart .toolbar h2 {
+            font-size: 24px;
+        }
+
+        #pos .cart-items {
+            border-bottom: 1px solid #dce8f4;
+        }
+
+        #pos .cart-line:first-child {
+            padding-top: 4px;
+        }
+
+        /* Usability layer shared by every management and reporting page. */
+        button,
+        input,
+        select {
+            min-height: 40px;
+        }
+
+        .qty button,
+        .invoice-link {
+            min-height: 0;
+        }
+
+        button:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        .nav:focus-visible {
+            outline: 3px solid rgba(67, 157, 224, .42);
+            outline-offset: 2px;
+        }
+
+        .page.active {
+            animation: page-enter .18s ease-out;
+        }
+
+        @keyframes page-enter {
+            from {
+                opacity: .3;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        nav {
+            position: static;
+        }
+
+        nav .nav {
+            min-height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toolbar {
+            align-items: center;
+        }
+
+        .toolbar>.primary,
+        .toolbar>.secondary {
+            white-space: nowrap;
+        }
+
+        #products>.toolbar:first-child,
+        #services>.toolbar:first-child,
+        #customers>.toolbar:first-child,
+        #employees>.toolbar:first-child,
+        #users>.toolbar:first-child,
+        #sales>.toolbar:first-child,
+        #returns>.toolbar:first-child,
+        #credits>.toolbar:first-child,
+        #daily-report>.toolbar:first-child {
+            gap: 14px;
+        }
+
+        #customers>.toolbar:first-child label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 10px;
+            border: 1px solid #d6e4f2;
+            border-radius: 9px;
+            background: #fff;
+        }
+
+        #customers>.toolbar:first-child select {
+            min-height: 34px;
+            padding: 4px 8px;
+            border: 0;
+            background: transparent;
+        }
+
+        .table-card {
+            scrollbar-color: #b8d2e8 #f4f8fc;
+        }
+
+        .table-card table {
+            border-spacing: 0;
+        }
+
+        .table-card td {
+            line-height: 1.42;
+        }
+
+        .table-card td:first-child {
+            font-weight: 650;
+            color: #173d6e;
+        }
+
+        .table-card td:last-child button+button {
+            margin-left: 5px;
+        }
+
+        #daily-report .toolbar>input[type="date"],
+        #daily-report .toolbar>label,
+        #daily-report .toolbar>button {
+            min-height: 42px;
+        }
+
+        #daily-report .toolbar>input[type="date"] {
+            padding: 0 10px;
+            min-width: 155px;
+        }
+
+        #daily-report .toolbar>label {
+            display: flex !important;
+            align-items: center;
+            gap: 12px !important;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            color: #5d718d !important;
+            font-size: 13px !important;
+            letter-spacing: 0 !important;
+            text-transform: none !important;
+        }
+
+        #daily-report .toolbar>label select {
+            min-width: 220px;
+            min-height: 42px;
+            padding: 0 38px 0 13px;
+            border: 1px solid #c7d9ea;
+            border-radius: 10px;
+            background-color: #fff;
+            color: #173d6e;
+            font-weight: 700;
+        }
+
+        #returns .table-card:first-of-type>.toolbar {
+            padding: 12px;
+            border-radius: 10px;
+            background: #f7fbff;
+            border: 1px solid #e0ebf6;
+        }
+
+        #returns #return-invoice {
+            min-height: 42px;
+        }
+
+        #credits .table-card,
+        #returns .table-card,
+        #sales .table-card {
+            overflow: auto;
+            max-height: calc(100vh - 260px);
+        }
+
+        #credits .table-card thead th,
+        #returns .table-card thead th,
+        #sales .table-card thead th {
+            top: 0;
+        }
+
+        .modal {
+            width: min(560px, calc(100vw - 28px));
+            max-height: calc(100vh - 32px);
+            overflow: auto;
+        }
+
+        .modal-header {
+            position: sticky;
+            top: -27px;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: -27px -27px 18px;
+            padding: 20px 27px 14px;
+            background: #fff;
+            border-bottom: 1px solid #e3ecf5;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+        }
+
+        .modal-close {
+            min-height: 36px;
+            width: 36px;
+            padding: 0;
+            border: 1px solid #cbddec;
+            border-radius: 50%;
+            background: #f4f9fe;
+            color: #275e91;
+            font-size: 24px;
+            line-height: 1;
+        }
+
+        .modal form>label {
+            display: block;
+            margin-bottom: 14px;
+            color: #415b78;
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .modal form>label input,
+        .modal form>label select {
+            display: block;
+            width: 100%;
+            margin-top: 6px;
+        }
+
+        .modal form .primary {
+            width: 100%;
+            margin-top: 6px;
+        }
+
+        .customer-price-list {
+            max-height: 46vh;
+            overflow: auto;
+            margin: 14px 0;
+            border: 1px solid #dce8f4;
+            border-radius: 10px;
+        }
+
+        .customer-price-list label {
+            display: flex !important;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            margin: 0 !important;
+            padding: 11px 12px;
+            border-bottom: 1px solid #e8f0f7;
+        }
+
+        .customer-price-list label:last-child {
+            border-bottom: 0;
+        }
+
+        .customer-price-list span {
+            min-width: 0;
+        }
+
+        .customer-price-list b,
+        .customer-price-list small {
+            display: block;
+        }
+
+        .customer-price-list small {
+            margin-top: 3px;
+            color: #71839b;
+            font-weight: 500;
+        }
+
+        .customer-price-list input {
+            width: 132px !important;
+            margin: 0 !important;
+        }
+
+        @media(max-width:1220px) {
+            .pos-customer-bar {
+                grid-template-columns: minmax(185px, 1fr) minmax(240px, 1.35fr) auto;
+            }
+
+            .price-tier {
+                grid-column: 1 / 3;
+            }
+
+            .cashier-picker {
+                grid-column: 3;
+                grid-row: 1;
+            }
+        }
+
+        @media(max-width:1000px) {
+            nav {
+                position: static;
+            }
+
+            #credits .table-card,
+            #returns .table-card,
+            #sales .table-card {
+                max-height: none;
+            }
+        }
+
+        @media(max-width:720px) {
+            header {
+                padding: 0 16px;
+            }
+
+            .brand img {
+                width: 95px;
+                height: 42px;
+            }
+
+            .brand-copy strong {
+                font-size: 16px;
+            }
+
+            .signed-in {
+                display: none;
+            }
+
+            .pos-heading {
+                align-items: flex-start;
+            }
+
+            .pos-heading h2 {
+                font-size: 24px;
+            }
+
+            .cashier-status {
+                min-width: 135px;
+                padding: 8px 10px;
+            }
+
+            .pos-customer-bar {
+                grid-template-columns: 1fr;
+                padding: 12px;
+            }
+
+            .price-tier,
+            .cashier-picker {
+                grid-column: auto;
+                grid-row: auto;
+            }
+
+            .add-customer-button {
+                width: 100%;
+            }
+
+            .page {
+                padding: 20px 14px 34px;
+            }
+
+            .toolbar {
+                gap: 10px;
+            }
+
+            #products>.toolbar:first-child,
+            #services>.toolbar:first-child,
+            #customers>.toolbar:first-child,
+            #employees>.toolbar:first-child,
+            #users>.toolbar:first-child,
+            #sales>.toolbar:first-child,
+            #returns>.toolbar:first-child,
+            #credits>.toolbar:first-child,
+            #daily-report>.toolbar:first-child {
+                padding: 17px;
+            }
+
+            #products>.toolbar:first-child>div,
+            #services>.toolbar:first-child>div,
+            #customers>.toolbar:first-child>div,
+            #employees>.toolbar:first-child>div,
+            #users>.toolbar:first-child>div,
+            #sales>.toolbar:first-child>div,
+            #returns>.toolbar:first-child>div,
+            #credits>.toolbar:first-child>div,
+            #daily-report>.toolbar:first-child>div {
+                flex-basis: 100%;
+            }
+
+            .toolbar>.primary,
+            .toolbar>.secondary {
+                flex: 1 1 auto;
+            }
+
+            #daily-report .toolbar>input[type="date"],
+            #daily-report .toolbar>label {
+                flex: 1 1 150px;
+            }
+
+            .table-card td:last-child button {
+                margin-bottom: 4px;
+            }
+        }
+
+        @media(max-width:1000px) {
+
+            header,
+            nav {
+                padding-left: 22px;
+                padding-right: 22px;
+            }
+
+            .page {
+                padding-left: 22px;
+                padding-right: 22px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            #pos .grid>.cart {
+                position: static;
+            }
+        }
+
+        @media(max-width:620px) {
+            header {
+                height: auto;
+                min-height: 76px;
+                padding: 12px 16px;
+                align-items: flex-start;
+            }
+
+            .brand img {
+                width: 92px;
+                height: 45px;
+            }
+
+            .brand {
+                font-size: 15px;
+                gap: 8px;
+            }
+
+            .brand small {
+                max-width: 180px;
+                white-space: normal;
+            }
+
+            .user-actions {
+                font-size: 0;
+                gap: 6px;
+            }
+
+            .logout {
+                font-size: 13px;
+                padding: 8px 10px;
+            }
+
+            nav {
+                padding: 10px 14px;
+                gap: 6px;
+                overflow: auto;
+                flex-wrap: nowrap;
+            }
+
+            .nav {
+                white-space: nowrap;
+                padding: 8px 11px;
+            }
+
+            .page {
+                padding: 22px 14px;
+            }
+
+            .toolbar {
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            h2 {
+                font-size: 21px;
+            }
+
+            .products {
+                grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .table-card {
+                overflow-x: auto;
+                padding: 13px;
+            }
+        }
+        /* Reconciliation and administration controls use the same compact card layout. */
+        .closing-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; align-items:end; }
+        .closing-fields label { display:grid; gap:6px; color:#51657f; font-size:12px; font-weight:700; }
+        .closing-fields input,.closing-fields select { padding:10px; }
+        .closing-card { max-width:1000px; }
+        .status-good { color:#167047; } .status-pending { color:#a96400; font-weight:700; } .status-void { color:#b42318; font-weight:700; }
+        #operations .table-card { overflow-x:auto; }
+        @media(max-width:720px){ .closing-fields{grid-template-columns:1fr;} }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="brand"><img src="assets/Orbix.png" alt="ORBIX Technologies logo">
+            <div class="brand-copy"><strong id="brand-name">ORBIX Technologies POS</strong><small
+                    id="brand-subtitle">POS &amp; Service Management · 0707080855</small></div>
+        </div>
+        <div class="user-actions">
+            <div class="signed-in"><span>Signed in as</span><b id="employee-name">Counter Operator</b></div><button
+                class="logout" onclick="logout()">Logout</button>
+        </div>
+    </header>
+    <nav><button class="nav admin-only" data-page="dashboard">Dashboard</button><button class="nav active"
+            data-page="pos">POS Sales</button><button class="nav admin-only"
+            data-page="products">Products</button><button class="nav admin-only"
+            data-page="services">Services</button><button class="nav admin-only"
+            data-page="customers">Customers</button><button class="nav admin-only"
+            data-page="employees">Employees</button><button class="nav admin-only" data-page="users">User
+            Accounts</button><button class="nav" data-page="sales">Sales
+            Reports</button><button class="nav" data-page="returns">Product Returns</button><button class="nav"
+            data-page="credits">Credit Payments</button><button class="nav" data-page="daily-report">Daily
+            Report</button><button class="nav" data-page="cash-closing">Counter Closing</button><button class="nav admin-only" data-page="operations">Operations</button></nav>
+    <main>
+        <section class="page active" id="pos">
+            <div class="grid">
+                <div>
+                    <div class="pos-heading">
+                        <div><span class="pos-eyebrow">POS SALES</span>
+                            <h2>Sales Counter</h2>
+                            <p>Choose a customer, then add products or services to the bill.</p>
+                        </div>
+                        <div id="counter-cashier" class="cashier-status"><span>Active cashier</span><b
+                                id="active-cashier">Counter Operator</b></div>
+                    </div>
+                    <div class="pos-customer-bar">
+                        <label class="pos-field customer-search-field">Find customer<input id="customer-search"
+                                type="search" placeholder="Type customer name" autocomplete="off"
+                                oninput="filterCustomers()" onkeydown="selectCustomerFromSearch(event)">
+                            <div id="customer-suggestions" class="customer-suggestions"></div>
+                        </label>
+                        <label class="pos-field customer-select">Customer<select id="customer" required
+                                aria-label="Customer" onchange="clearCustomerSearch()"></select></label>
+                        <button type="button" class="secondary add-customer-button" onclick="openQuickCustomerForm()">+
+                            Add Customer</button>
+                        <div class="price-tier"><span>Customer price</span><b id="customer-price-tier">Select customer
+                                to apply the correct price</b></div>
+                        <label id="cashier-picker" class="pos-field cashier-picker">Cashier<select id="cashier"
+                                title="Cashier"></select></label>
+                    </div>
+                    <input class="search" id="scan" placeholder="Search by product, service or SKU" autofocus>
+                    <p class="scan-note">Type a product name, service name or SKU to add it to the bill.</p>
+                    <div class="products" id="product-list"></div>
+                </div>
+                <aside class="panel cart">
+                    <div class="toolbar">
+                        <h2>Current Bill</h2><button class="secondary" onclick="clearCart()">Clear</button>
+                    </div>
+                    <div class="cart-items" id="cart"></div>
+                    <div class="summary">
+                        <div><span>Subtotal</span><b id="subtotal">LKR 0.00</b></div>
+                        <div><span>Item discounts</span><b id="item-discount">− LKR 0.00</b></div>
+                        <div><span id="discount-label">Bill discount (5%)</span><b id="discount">− LKR 0.00</b></div>
+                        <div style="display:block;margin-top:10px"><label class="muted">Bill discount</label>
+                            <div style="display:flex;gap:6px;margin-top:4px"><select id="discount-type"
+                                    onchange="cartView()"
+                                    style="width:86px;padding:9px;border:1px solid #cbd5e1;border-radius:6px">
+                                    <option value="percent">%</option>
+                                    <option value="amount">LKR</option>
+                                </select><input id="discount-value" oninput="cartView()" type="number" min="0"
+                                    step="0.01" value="5" aria-label="Bill discount value"
+                                    style="width:100%;padding:9px;border:1px solid #cbd5e1;border-radius:6px"></div>
+                        </div>
+                        <div class="total"><span>Total</span><b id="total">LKR 0.00</b></div>
+                        <div style="display:block;margin-top:10px"><label class="muted">Print size</label><select
+                                id="print-size" style="width:100%;padding:9px;margin-top:4px">
+                                <option value="a4">A4 Invoice</option>
+                                <option value="a5">A5 Invoice</option>
+                            </select></div>
+                        <div style="display:block;margin-top:10px"><label class="muted">Payment method</label><select
+                                id="payment-method" onchange="cartView()"
+                                style="width:100%;padding:9px;margin-top:4px;border:1px solid #cbd5e1;border-radius:6px">
+                                <option value="Cash">Cash</option>
+                                <option value="Card">Card</option>
+                                <option value="Credit">Credit / Part Payment</option>
+                            </select></div>
+                        <div id="cash-payment-fields" style="display:block;margin-top:8px"><label class="muted">Cash
+                                received</label><input id="cash-received" oninput="cartView()" type="number" min="0"
+                                step="0.01" placeholder="Enter cash amount"
+                                style="width:100%;padding:9px;margin-top:4px;border:1px solid #cbd5e1;border-radius:6px">
+                            <div style="display:flex;justify-content:space-between;margin-top:7px"><span
+                                    class="muted">Change</span><b id="change-amount">LKR 0.00</b></div>
+                        </div><button id="checkout-button" class="primary wide" onclick="checkout()">Confirm Payment &
+                            Print Receipt</button>
+                        <p class="scan-note">Select A4, A5 before printing.</p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+        <section class="page" id="returns">
+            <div class="toolbar">
+                <div>
+                    <h2>Product Returns</h2>
+                    <p class="scan-note">Find the original invoice, select returned products and restore them to stock.
+                    </p>
+                </div>
+            </div>
+            <div class="table-card">
+                <div class="toolbar" style="align-items:end"><label
+                        style="display:grid;gap:5px;font-weight:700;color:#51657f;font-size:12px">Invoice Number<input
+                            id="return-invoice" placeholder="Example: INV-2026-00128"
+                            style="min-width:260px;padding:10px"></label><button class="primary"
+                        onclick="findReturnInvoice()">Find Invoice</button></div>
+                <div id="return-sale-details" class="muted">Enter the invoice number from the customer's bill.</div>
+                <div id="return-items" style="margin-top:14px"></div>
+                <div id="return-actions" style="display:none;margin-top:14px"><label
+                        style="display:grid;gap:5px;font-weight:700;color:#51657f;font-size:12px">Return reason <input
+                            id="return-reason" placeholder="Optional reason" style="padding:10px"></label><button
+                        class="primary" style="margin-top:12px" onclick="processReturn()">Confirm Return &amp; Restore
+                        Stock</button></div>
+            </div>
+            <div class="table-card" style="margin-top:18px">
+                <div class="toolbar">
+                    <h3>Return History</h3>
+                    <div class="management-filters compact"><input id="returns-search" type="search"
+                            placeholder="Search return no., invoice, customer or staff" oninput="returnsView()"
+                            aria-label="Search return history"><button type="button" class="secondary"
+                            onclick="clearManagementFilters('returns')">Clear</button><span class="muted"
+                            id="returns-filter-count"></span></div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Return No.</th>
+                            <th>Invoice</th>
+                            <th>Customer</th>
+                            <th>Processed By</th>
+                            <th>Date</th>
+                            <th>Items</th>
+                            <th>Refund</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="returns-table"></tbody>
+                </table>
+            </div>
+        </section>
+        <section class="page" id="credits">
+            <div class="toolbar">
+                <div>
+                    <h2>Credit Payments</h2>
+                    <p class="scan-note">Collect outstanding balances from customers who paid part of their bill.</p>
+                </div>
+            </div>
+            <div class="management-filters"><input id="credits-search" type="search"
+                    placeholder="Search invoice, customer or date" oninput="creditsView()" aria-label="Search credit payments"><select
+                    id="credits-sort" onchange="creditsView()" aria-label="Sort credit payments"><option value="date-new">Sort: Newest first</option><option value="date-old">Sort: Oldest first</option><option value="customer">Sort: Customer (A–Z)</option><option value="balance-high">Sort: Balance (high to low)</option><option value="balance-low">Sort: Balance (low to high)</option></select><button type="button" class="secondary" onclick="clearManagementFilters('credits')">Clear</button><span class="muted" id="credits-filter-count"></span></div>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Invoice</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Bill Total</th>
+                            <th>Paid</th>
+                            <th>Credit Balance</th>
+                            <th>Collect Payment</th>
+                        </tr>
+                    </thead>
+                    <tbody id="credits-table"></tbody>
+                </table>
+            </div>
+        </section>
+        <section class="page" id="products">
+            <div class="toolbar">
+                <div>
+                    <h2>Product Inventory</h2>
+                    <p class="scan-note">Manage computer parts, printing supplies and photo-frame stock.</p>
+                </div><div><button class="secondary" onclick="openStockAdjustment()">Stock Adjustment</button> <button class="primary" onclick="openForm('product')">+ Add Product</button></div>
+            </div>
+            <div class="inventory-filters" aria-label="Product inventory filters">
+                <input id="inventory-search" type="search" placeholder="Search product, SKU or category"
+                    oninput="productsView()" aria-label="Search products">
+                <select id="inventory-category" onchange="productsView()" aria-label="Filter by category">
+                    <option value="">All categories</option>
+                </select>
+                <select id="inventory-sort" onchange="productsView()" aria-label="Sort products">
+                    <option value="name">Sort: Name (A–Z)</option>
+                    <option value="category">Sort: Category (A–Z)</option>
+                    <option value="stock-low">Sort: Stock (low to high)</option>
+                    <option value="stock-high">Sort: Stock (high to low)</option>
+                </select>
+                <button type="button" class="secondary" onclick="clearInventoryFilters()">Clear</button>
+            </div>
+            <div class="stats" id="product-stats"></div>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>SKU / Barcode</th>
+                            <th>Category</th>
+                            <th>Warranty</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Manage</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table"></tbody>
+                </table>
+            </div>
+        </section>
+        <section class="page" id="services">
+            <div class="toolbar">
+                <div>
+                    <h2>Service Catalogue</h2>
+                    <p class="scan-note">Set up repair, design, installation and printing service prices.</p>
+                </div><button class="primary" onclick="openForm('service')">+ Add Service</button>
+            </div>
+            <div class="management-filters"><input id="services-search" type="search"
+                    placeholder="Search service, code or duration" oninput="servicesView()" aria-label="Search services"><select
+                    id="services-sort" onchange="servicesView()" aria-label="Sort services"><option value="name">Sort: Name (A–Z)</option><option value="code">Sort: Code (A–Z)</option><option value="price-low">Sort: Price (low to high)</option><option value="price-high">Sort: Price (high to low)</option></select><button type="button" class="secondary" onclick="clearManagementFilters('services')">Clear</button><span class="muted" id="services-filter-count"></span></div>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Code</th>
+                            <th>Duration</th>
+                            <th>Price</th>
+                            <th>Manage</th>
+                        </tr>
+                    </thead>
+                    <tbody id="services-table"></tbody>
+                </table>
+            </div>
+        </section>
+        <section class="page" id="customers">
+            <div class="toolbar">
+                <div>
+                    <h2>Customers</h2>
+                    <p class="scan-note">Keep customer details and set individual prices when needed.</p>
+                </div><button class="primary" onclick="openForm('customer')">+ Add Customer</button>
+            </div>
+            <div class="management-filters"><input id="customers-search" type="search"
+                    placeholder="Search name, phone, email or job reference" oninput="customersView()" aria-label="Search customers"><select
+                    id="customers-sort" onchange="customersView()" aria-label="Sort customers"><option value="name">Sort: Name (A–Z)</option><option value="name-desc">Sort: Name (Z–A)</option><option value="phone">Sort: Phone number</option><option value="recent">Sort: Recently added</option></select><button type="button" class="secondary" onclick="clearManagementFilters('customers')">Clear</button><span class="muted" id="customers-filter-count"></span></div>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Device / Job Reference</th>
+                            <th>Email</th>
+                            <th>Manage</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customers-table"></tbody>
+                </table>
+            </div>
+        </section>
+        <section class="page" id="employees">
+            <div class="toolbar">
+                <div>
+                    <h2>Employees</h2>
+                    <p class="scan-note">Maintain staff information used for sales and service accountability.</p>
+                </div><button class="primary" onclick="openForm('employee')">+ Add Employee</button>
+            </div>
+            <div class="management-filters"><input id="employees-search" type="search"
+                    placeholder="Search employee, role or phone" oninput="employeesView()" aria-label="Search employees"><select
+                    id="employees-sort" onchange="employeesView()" aria-label="Sort employees"><option value="name">Sort: Name (A–Z)</option><option value="role">Sort: Role (A–Z)</option><option value="phone">Sort: Phone number</option></select><button type="button" class="secondary" onclick="clearManagementFilters('employees')">Clear</button><span class="muted" id="employees-filter-count"></span></div>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Manage</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employees-table"></tbody>
+                </table>
+            </div>
+        </section>
+        <section class="page" id="users">
+            <div class="toolbar">
+                <div>
+                    <h2>User Accounts</h2>
+                    <p class="scan-note">Create individual Admin and Counter accounts. Sales are recorded against the
+                        logged-in Counter.</p>
+                </div><button class="primary" onclick="openUserForm()">+ Add User Account</button>
+            </div>
+            <div class="management-filters"><input id="users-search" type="search"
+                    placeholder="Search full name, username or privilege" oninput="usersView()" aria-label="Search user accounts"><select
+                    id="users-sort" onchange="usersView()" aria-label="Sort user accounts"><option value="name">Sort: Full name (A–Z)</option><option value="username">Sort: Username (A–Z)</option><option value="role">Sort: Privilege</option></select><button type="button" class="secondary" onclick="clearManagementFilters('users')">Clear</button><span class="muted" id="users-filter-count"></span></div>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Username</th>
+                            <th>Privilege</th>
+                            <th>Manage</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table"></tbody>
+                </table>
+            </div>
+        </section>
+        <section class="page" id="sales">
+            <div class="toolbar">
+                <div>
+                    <h2>Sales Reports</h2>
+                    <p class="scan-note">Review completed bills and open an invoice directly from its invoice number.
+                    </p>
+                </div><button class="secondary" onclick="exportSales()">Export CSV</button>
+            </div>
+            <div class="stats" id="sales-stats"></div>
+            <div class="sales-search-bar"><input class="search" id="sales-search" type="search"
+                    placeholder="Search invoice, customer, cashier, payment method or date"
+                    oninput="filterSales()"><button class="secondary" type="button" onclick="clearSalesSearch()">Clear
+                    Search</button><span class="muted" id="sales-search-count"></span></div>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Invoice</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Cashier</th>
+                            <th>Payment</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sales-table"></tbody>
+                </table>
+            </div>
+        </section>
+        <section class="page" id="daily-report">
+            <div class="toolbar">
+                <div>
+                    <h2>Daily Closing Report</h2>
+                    <p class="scan-note">Computer products, photo frames, print items and completed services for the
+                        selected date.</p>
+                </div><label class="admin-only"
+                    style="display:grid;gap:4px;font-size:11px;font-weight:bold;color:#64748b">Cashier<select
+                        id="report-cashier"></select></label><input id="report-date" type="date"><button class="primary"
+                    onclick="loadDailyReport()">Generate Report</button><button class="secondary"
+                    onclick="downloadDailyReport('pdf')">Download PDF</button><button class="secondary"
+                    onclick="downloadDailyReport('csv')">Export CSV</button>
+            </div>
+            <div class="stats" id="daily-report-stats"></div>
+            <div class="table-card" style="margin-top:16px">
+                <div class="toolbar">
+                    <h3>Credit Payments Collected</h3>
+                </div>
+                <div id="daily-credit-payments"></div>
+            </div>
+            <div class="table-card">
+                <div class="toolbar">
+                    <h3>Services - Net Sales After Discounts</h3>
+                </div>
+                <div id="daily-services"></div>
+            </div>
+            <div class="table-card" style="margin-top:16px">
+                <div class="toolbar">
+                    <h3>Products &amp; Print Items - Net Sales After Discounts &amp; Returns</h3>
+                </div>
+                <div id="daily-parts"></div>
+            </div>
+            <div class="table-card" style="margin-top:16px">
+                <div class="toolbar">
+                    <h3>Products Returned</h3>
+                </div>
+                <div id="daily-returns"></div>
+            </div>
+        </section>
+        <section class="page" id="cash-closing">
+            <div class="toolbar"><div><h2>Counter Closing</h2><p class="scan-note">Record the counted cash at the end of the day and compare it with the expected balance.</p></div></div>
+            <div class="table-card closing-card">
+                <div class="closing-fields"><label>Date<input id="closing-date" type="date"></label><label class="admin-only">Cashier<select id="closing-cashier"></select></label><label>Counted cash<input id="counted-cash" type="number" min="0" step="0.01" placeholder="Enter cash counted"></label><label>Closing note<input id="closing-note" placeholder="Optional note"></label><button class="primary" onclick="closeCounter()">Save Day-End Closing</button></div>
+                <p id="closing-preview" class="scan-note">Expected cash will be calculated from completed cash sales, credit collections and approved cash returns.</p>
+            </div>
+            <div class="table-card" style="margin-top:18px"><h3>Closing History</h3><table><thead><tr><th>Date</th><th>Cashier</th><th>Expected Cash</th><th>Counted Cash</th><th>Difference</th><th>Closed By</th></tr></thead><tbody id="cash-closings-table"></tbody></table></div>
+        </section>
+        <section class="page" id="operations">
+            <div class="toolbar"><div><h2>Operations &amp; Controls</h2><p class="scan-note">Review audit history, inventory movements, pending returns and database protection.</p></div><button class="secondary" onclick="openRestoreBackup()">Restore Backup</button><button class="primary" onclick="enterpriseBackup()">Download Backup</button></div>
+            <div class="stats" id="system-status"></div>
+            <div class="table-card"><div class="toolbar"><h3>Pending Return Approvals</h3><span class="muted">Counter returns do not change stock until approved.</span></div><table><thead><tr><th>Return No.</th><th>Invoice</th><th>Customer</th><th>Requested By</th><th>Refund</th><th>Action</th></tr></thead><tbody id="pending-returns-table"></tbody></table></div>
+            <div class="table-card" style="margin-top:18px"><h3>Stock Movement History</h3><table><thead><tr><th>Date</th><th>Product</th><th>Change</th><th>Stock After</th><th>Type</th><th>Staff</th><th>Reason</th></tr></thead><tbody id="stock-movements-table"></tbody></table></div>
+            <div class="table-card" style="margin-top:18px"><h3>Audit Log</h3><table><thead><tr><th>Date</th><th>Staff</th><th>Action</th><th>Record</th><th>Details</th></tr></thead><tbody id="audit-logs-table"></tbody></table></div>
+        </section>
+        <section class="page" id="dashboard">
+            <div class="dashboard-hero">
+                <div>
+                    <p class="dashboard-eyebrow">ORBIX Operations Center</p>
+                    <h2>Business Dashboard</h2>
+                    <p>Today’s sales, customer activity and inventory status in one place.</p>
+                </div>
+                <div class="dashboard-actions"><button class="secondary" onclick="enterpriseBackup()">Database
+                        Backup</button><button class="primary" onclick="openPosSales()">Open POS Sales</button></div>
+            </div>
+            <div class="stats dashboard-metrics" id="enterprise-dashboard"></div>
+            <div class="dashboard-lower">
+                <section class="table-card dashboard-panel">
+                    <div class="dashboard-panel-header">
+                        <div>
+                            <h3>Inventory attention</h3>
+                            <p>Products that need restocking soon.</p>
+                        </div><span class="muted" id="stock-alert-count"></span>
+                    </div>
+                    <div class="dashboard-list" id="enterprise-alerts"></div>
+                </section>
+                <section class="table-card dashboard-panel">
+                    <div class="dashboard-panel-header">
+                        <div>
+                            <h3>Best-selling items</h3>
+                            <p>Based on recorded sale quantities.</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-list" id="enterprise-best-sellers"></div>
+                </section>
+            </div>
+        </section>
+    </main>
+    <div class="modal-bg" id="modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <button type="button" class="modal-close" onclick="closeModal()" aria-label="Close form"
+                    title="Close">&times;</button>
+            </div>
+            <form id="form"></form>
+        </div>
+    </div>
+    <!-- Load core POS state first; later scripts enhance payments, reports and dashboard data. -->
+    <script src="app.js?v=20260822-1"></script>
+    <script src="enterprise.js?v=20260911-1"></script>
+    <script src="payment-ui.js?v=20260821-4"></script>
+    <script src="daily-report.js?v=20260821-6"></script>
+</body>
+
+</html>
